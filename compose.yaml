@@ -1,0 +1,83 @@
+services:
+  db:
+    image: postgres:18
+    container_name: drf-tutorial-db
+    restart: no
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - drf-tutorial-db:/var/lib/postgresql
+    networks:
+      - mynetwork
+
+  web:
+    build: ./docker/web
+    image: custom-apache-django
+    container_name: drf-tutorial-web
+#    command: bash -c "tail -f /dev/null"
+    command: bash -c "python manage.py runserver 0:8000"
+#    command: bash -c "chmod 600 /root/.my_pgpass && python -m pip install polls-package/dist/django_polls-0.1.tar.gz && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0:8000"
+#     && python manage.py collectstatic 
+    restart: no
+    volumes:
+      #      - /home/fady/temp/django/code:/code
+      - ./code:/var/www/
+      - ./docker/web/secrets/.pg_service.conf:/root/.pg_service.conf
+      - ./docker/web/secrets/.my_pgpass:/root/.my_pgpass
+    ports: 
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      PGSERVICEFILE: /root/.pg_service.conf
+    env_file:
+      - .env
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: drf-tutorial-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    env_file:
+      - .env
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+        
+#   adminer:
+#     image: adminer
+#     container_name: django-adminer
+#     restart: on-failure # no  always  on-failure   unless-stopped
+#     ports:
+#       - "8080:8080"
+#     networks:
+#       - mynetwork
+
+volumes:
+  drf-tutorial-db:
+
+networks:
+  mynetwork:
+    driver: bridge

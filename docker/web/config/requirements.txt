@@ -1,0 +1,7 @@
+djangorestframework
+psycopg[binary]
+ptvsd
+ipython
+django-debug-toolbar
+drf-spectacular
+whitenoise
