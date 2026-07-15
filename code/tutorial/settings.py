@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&s8(r=14vk+3x6=s6_$qe7bg)%!2*o-&&tpqn7u%6a6m_5m2(x"
+SECRET_KEY = "django-insecure-03bw%oe%spm3ns%n5r3&pbazklksk&c75x$z8syi$l71kldhr1"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -72,13 +72,21 @@ WSGI_APPLICATION = "tutorial.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# -------------- Custom ---------------
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "djangodb",
+        "USER": "dbuser",
+        "PASSWORD": "dbpassword",
+        "HOST": "db",
+        "PORT": "5432",
+#        "OPTIONS": {
+#            "service": "my_service",
+#            "passfile": "/root/.my_pgpass",
+#        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -103,8 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
+# LANGUAGE_CODE = "ar-eg"
 
-TIME_ZONE = "UTC"
+# TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Cairo"
 
 USE_I18N = True
 
@@ -115,3 +125,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+
