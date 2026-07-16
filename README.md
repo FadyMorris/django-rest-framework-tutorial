@@ -62,6 +62,39 @@
   Email address: admin@example.com
   Password: pass
 
+## Testing the API
+- Using CURL:  
+  ```bash
+  curl -u admin:pass -H 'Accept: application/json; indent=4' http://127.0.0.1:8000/users/
+  ```
+
+  ```bash
+  curl http://127.0.0.1:8000/snippets/ \
+      -u admin:pass \
+      -H 'Accept: application/json; indent=4' \
+  ```
+
+  ```bash
+  curl http://127.0.0.1:8000/users/ \
+      -X 'OPTIONS' \
+      -u admin:pass \
+      -H 'Accept: application/json; indent=4' \
+  ```
+- Using httpie:  
+  Install `httpie`:  
+  ```bash
+  pip install httpie
+  ```
+
+  Test GET request:  
+  ```bash
+  http -a admin:pass http://127.0.0.1:8000/snippets/ 'Accept:application/json; indent=4'
+  ```
+
+  Test POST request:  
+  ```bash
+  http -a admin:pass POST http://127.0.0.1:8000/snippets/ code="print(123)"
+  ```
 
 ## Tips
 - View the SQL output of a migration:  
